@@ -16,7 +16,33 @@ namespace Calculator
             Console.WriteLine("M - Multiplication");
             Console.WriteLine("D - Division");
             // ======= UI end ======= //
-            Addition();
+
+        }
+        public static void ChooseSimpleOperations()
+        {
+            string input = Console.ReadLine(); // can be another method to validate right input
+
+            // Conditional cases
+            if (input.Trim() == "A")
+            {
+                Addition();
+            }
+            else if (input.Trim() == "S")
+            {
+                Subtraction();
+            }
+            else if (input.Trim() == "M")
+            {
+                Multiplication();
+            }
+            else if (input.Trim() == "D")
+            {
+                Division();
+            }
+            else
+            {
+                // method to go to choose options input again, loop again 
+            }
         }
 
         // Simple Operations
