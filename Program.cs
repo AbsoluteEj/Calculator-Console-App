@@ -1,13 +1,45 @@
 ﻿using System;
+using Microsoft.Data.Sqlite;
 
 namespace Calculator
 {
     class Program
     {
+        static string calculationsDB = @"CalculationHistory.db";
+        static string useCountDB = @"CountUseCalc.db";
         static void Main(string[] args)
         {
+            // Create Database SQLite for main data calculations
+            using (var connection = new SqliteConnection(calculationsDB))
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText =
+                    @"CREATE TABLE IF NOT EXISTS calculations (
+                        Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        Solution TEXT,
+                        Answer DOUBLE
+                        )";
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+            // Create Database for storing how many times calculator is used
+            using (var connection = new SqliteConnection(useCountDB))
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText =
+                    @"CREATE TABLE IF NOT EXISTS calculator_used (
+                        Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        )";
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+            // Count how many times this calculator is used
+            int useCount;
+
             // ======= UI ======= //
-            Console.WriteLine("This is the Calculator Console App\n");
+            Console.WriteLine($"This is the Calculator Console App. You used this Calculator {} times.");
             Console.WriteLine(""); // DateTime search it
             Console.WriteLine("What would you like to perform today? Please choose from the options below.\n");
             Console.WriteLine("Enter the letter of the operations you want to perform");
@@ -16,6 +48,8 @@ namespace Calculator
             Console.WriteLine("M - Multiplication");
             Console.WriteLine("D - Division");
             // ======= UI end ======= //
+
+            ChooseSimpleOperations();
 
         }
         public static void ChooseSimpleOperations()
@@ -133,5 +167,13 @@ namespace Calculator
             // Display solution of result
             Console.WriteLine($"{finalValue1} / {finalValue2} = {finalResult}");
         }
+        // ========================================================================== //
+        // VALIDATION
+        public static void ValidateInput()
+        {
+
+        }
+        // DATABASE (storing and deleting list)
+        
     }
 }
